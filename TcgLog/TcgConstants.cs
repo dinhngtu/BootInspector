@@ -1,7 +1,7 @@
 namespace TcgLog {
     [EnumFormat(EnumFormatType.Hex)]
     [Source("edk2/Tcg2Protocol.h")]
-    enum TCG_EVENTTYPE : uint {
+    internal enum TCG_EVENTTYPE : UInt32 {
         //
         // Standard event types
         //
@@ -59,7 +59,7 @@ namespace TcgLog {
 
     [EnumFormat(EnumFormatType.Hex)]
     [Source("edk2/Tpm20.h")]
-    enum TPM_ALG_ID : ushort {
+    internal enum TPM_ALG_ID : UInt16 {
         TPM_ALG_ERROR = 0x0000,
         TPM_ALG_FIRST = 0x0001,
         // #define TPM_ALG_RSA            (TPM_ALG_ID)(0x0001)

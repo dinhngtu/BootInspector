@@ -1,5 +1,5 @@
 namespace TcgLog {
-    enum EnumFormatType {
+    internal enum EnumFormatType {
         Decimal,
         Hex,
     }
