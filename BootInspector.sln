@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BootLogDecoder", "BootLogDecoder\BootLogDecoder.csproj", "{AD9E15E6-4CFA-423A-869F-F45E2F4BE19F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcgLog", "TcgLog\TcgLog.csproj", "{7DFA2942-ACD9-47D6-A5F2-9F20EEA284C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD9E15E6-4CFA-423A-869F-F45E2F4BE19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD9E15E6-4CFA-423A-869F-F45E2F4BE19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD9E15E6-4CFA-423A-869F-F45E2F4BE19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD9E15E6-4CFA-423A-869F-F45E2F4BE19F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DFA2942-ACD9-47D6-A5F2-9F20EEA284C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DFA2942-ACD9-47D6-A5F2-9F20EEA284C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DFA2942-ACD9-47D6-A5F2-9F20EEA284C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DFA2942-ACD9-47D6-A5F2-9F20EEA284C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C4106BB-5DCC-48CB-8542-D2F007669515}
+	EndGlobalSection
+EndGlobal
