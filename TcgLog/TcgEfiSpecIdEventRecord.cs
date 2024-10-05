@@ -61,6 +61,9 @@ namespace TcgLog {
                 remain = remain[AlgorithmSize..];
             }
 
+            var vendorInfoSize = remain[0];
+            var vendorInfo = remain.Slice(1, vendorInfoSize);
+
             _children = [
                 new StringRecord(signature, nameof(_invariant.signature)),
                 new ValueRecord<uint>(_invariant.platformClass, nameof(_invariant.platformClass)),
@@ -77,10 +80,14 @@ namespace TcgLog {
                 ], nameof(TCG_EfiSpecIdEventAlgorithmSize)));
             }
             _children.Add(new AggregatedRecord<int>(algRecords, "digestSize"));
+            _children.Add(new ByteRecord(vendorInfo, nameof(vendorInfo)));
         }
 
-        internal static int HeaderSize { get; } = Marshal.SizeOf<TCG_EfiSpecIDEventStruct_Invariant>();
-        internal static int AlgorithmSize { get; } = Marshal.SizeOf<TCG_EfiSpecIdEventAlgorithmSize>();
+        private static int HeaderSize { get; } = Marshal.SizeOf<TCG_EfiSpecIDEventStruct_Invariant>();
+        private static int AlgorithmSize { get; } = Marshal.SizeOf<TCG_EfiSpecIdEventAlgorithmSize>();
+
+        internal UINTNSIZE UintNSize => _invariant.uintnSize;
+        internal IReadOnlyList<TCG_EfiSpecIdEventAlgorithmSize> Algorithms => _algorithms;
 
         public override string Name { get; } = "TCG_EfiSpecIDEventStruct";
         public override RecordSource? Source => RecordSourceAttribute.Get<TCG_EfiSpecIDEventStruct_Invariant>();

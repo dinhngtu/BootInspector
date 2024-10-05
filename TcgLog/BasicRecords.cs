@@ -1,9 +1,9 @@
 using System.Xml;
 
 namespace TcgLog {
-    public class ByteRecord(ReadOnlySpan<byte> bytes) : RecordBase {
+    public class ByteRecord(ReadOnlySpan<byte> bytes, string name = "Bytes") : RecordBase {
         private readonly byte[] _bytes = bytes.ToArray();
-        public override string Name { get; } = "Bytes";
+        public override string Name { get; } = name;
         public override RecordSource? Source { get; } = null;
         public byte[] GetBytes() { return _bytes; }
         public int Size => _bytes.Length;

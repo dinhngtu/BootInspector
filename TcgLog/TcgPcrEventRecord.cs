@@ -23,6 +23,7 @@ namespace TcgLog {
         private readonly TCG_PCR_EVENT_HDR _value;
         private readonly List<RecordBase> _children;
         private readonly byte[] _digest = new byte[20];
+        private readonly RecordBase _eventData;
 
         public static TcgPcrEventRecord CreateFirst(ReadOnlySpan<byte> bytes, ParseSettings? settings = null) {
             var headerBytes = bytes[..HeaderSize];
@@ -48,24 +49,26 @@ namespace TcgLog {
         private TcgPcrEventRecord(ReadOnlySpan<byte> bytes, TCG_PCR_EVENT_HDR value, byte[] digest, RecordBase eventData, ParseSettings? settings) : base(bytes) {
             _value = value;
             _digest = digest;
+            _eventData = eventData;
             _children = [
                 new ValueRecord<uint>(_value.PCRIndex, nameof(_value.PCRIndex)),
                 new ParsedEnumRecord<TCG_EVENTTYPE>(_value.EventType, nameof(_value.EventType), settings),
                 new TcgDigestRecord(_digest),
                 new ValueRecord<uint>(_value.EventSize, nameof(_value.EventSize)),
-                new AggregatedRecord<TCG_PCR_EVENT_HDR>([eventData], "EventData"),
+                new AggregatedRecord<TCG_PCR_EVENT_HDR>([_eventData], "EventData"),
             ];
         }
 
-        public override string Name { get; } = nameof(TCG_PCR_EVENT_HDR);
+        public override string Name { get; } = "TCG_PCR_EVENT";
         public override RecordSource? Source => RecordSourceAttribute.Get<TCG_PCR_EVENT_HDR>();
 
-        internal static int HeaderSize { get; } = Marshal.SizeOf<TCG_PCR_EVENT_HDR>();
+        private static int HeaderSize { get; } = Marshal.SizeOf<TCG_PCR_EVENT_HDR>();
 
         internal uint PCRIndex => _value.PCRIndex;
         internal TCG_EVENTTYPE EventType => _value.EventType;
         internal byte[] Digest => _digest;
         internal uint EventSize => _value.EventSize;
+        internal RecordBase EventData => _eventData;
 
         public override IReadOnlyList<RecordBase> Children => _children;
     }
