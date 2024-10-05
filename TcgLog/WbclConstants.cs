@@ -1,7 +1,7 @@
 namespace TcgLog {
     [EnumFormat(EnumFormatType.Hex)]
-    [Source("wbcl.h")]
-    internal enum SIPAEV : UInt32 {
+    [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+    internal enum SIPAEV : uint {
         //----------------------------------TCG-defined PCR Event Types
         SIPAEV_PREBOOT_CERT = 0x00000000,
         SIPAEV_POST_CODE = 0x00000001,

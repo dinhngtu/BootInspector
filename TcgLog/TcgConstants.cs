@@ -1,7 +1,7 @@
 namespace TcgLog {
     [EnumFormat(EnumFormatType.Hex)]
-    [Source("edk2/Tcg2Protocol.h")]
-    internal enum TCG_EVENTTYPE : UInt32 {
+    [RecordSource("edk2/Tcg2Protocol.h", RecordSourcePlatform.Uefi)]
+    internal enum TCG_EVENTTYPE : uint {
         //
         // Standard event types
         //
@@ -55,11 +55,88 @@ namespace TcgLog {
         /// of GET_MEASUREMENT or CHALLENGE_AUTH. It goes to PCR7.
         /// </summary>
         EV_EFI_SPDM_DEVICE_AUTHORITY = EV_EFI_EVENT_BASE + 0xE4,
+
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_UNUSED = 0x00000002,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_IPL = 0x0000000D,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_IPL_PARTITION_DATA = 0x0000000E,
+
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_EFI_VARIABLE_BOOT2 = 0x8000000C,
+
+        //----------------------------------PCR Event Types for Intel TXT
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_EVENT_BASE = 0x00000400,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_PCR_MAPPING = 0x00000401,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_HASH_START = 0x00000402,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_COMBINED_HASH = 0x00000403,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_MLE_HASH = 0x00000404,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_BIOSAC_REG_DATA = 0x0000040A,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_CPU_SCRTM_STAT = 0x0000040B,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_LCP_CONTROL_HASH = 0x0000040C,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_ELEMENTS_HASH = 0x0000040D,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_STM_HASH = 0x0000040E,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_OSSINITDATA_CAP_HASH = 0x0000040F,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_SINIT_PUBKEY_HASH = 0x00000410,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_LCP_HASH = 0x00000411,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_LCP_DETAILS_HASH = 0x00000412,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_LCP_AUTHORITIES_HASH = 0x00000413,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_NV_INFO_HASH = 0x00000414,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_COLD_BOOT_BIOS_HASH = 0x00000415,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_KM_HASH = 0x00000416,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_BPM_HASH = 0x00000417,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_KM_INFO_HASH = 0x00000418,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_BPM_INFO_HASH = 0x00000419,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_BOOT_POL_HASH = 0x0000041A,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_RANDOM_VALUE = 0x000004FE,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_TXT_CAP_VALUE = 0x000004FF,
+        //----------------------------------PCR Event Types for AMD SecureLaunch
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_EVENT_BASE = 0x00008000,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_LOAD = 0x00008001,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_PSP_FW_SPLT = 0x00008002,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_TSME_RB_FUSE = 0x00008003,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_PUB_KEY = 0x00008004,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_SVN = 0x00008005,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_LOAD_1 = 0x00008006,
+        [RecordSource("wbcl.h", RecordSourcePlatform.Windows)]
+        SIPAEV_AMD_SL_SEPARATOR = 0x00008007,
     }
 
     [EnumFormat(EnumFormatType.Hex)]
-    [Source("edk2/Tpm20.h")]
-    internal enum TPM_ALG_ID : UInt16 {
+    [RecordSource("edk2/Tpm20.h")]
+    internal enum TPM_ALG_ID : ushort {
         TPM_ALG_ERROR = 0x0000,
         TPM_ALG_FIRST = 0x0001,
         // #define TPM_ALG_RSA            (TPM_ALG_ID)(0x0001)

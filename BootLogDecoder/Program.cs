@@ -1,14 +1,24 @@
 using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using TcgLog;
 
 namespace BootLogDecoder {
     internal class Program {
         static void Main(string[] args) {
             var logbytes = File.ReadAllBytes(args[0]);
-            var log = new WbclLog(logbytes);
+
+            var parseSettings = new ParseSettings() {
+                AcceptablePlatforms = RecordSourcePlatform.Uefi | RecordSourcePlatform.Windows,
+            };
+            var log = new WbclLog(logbytes, parseSettings);
+
+            var formatterSettings = new LogFormatterSettings {
+                WriteSource = true,
+            };
             var logxml = new XmlDocument();
-            logxml.AppendChild(log.ToXml(logxml));
+            logxml.AppendChild(log.ToXml(logxml, formatterSettings));
+
             var writerSettings = new XmlWriterSettings {
                 Indent = true,
                 IndentChars = new string(' ', 2),

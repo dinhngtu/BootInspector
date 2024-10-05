@@ -16,7 +16,7 @@ namespace TcgLog {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    [Source("edk2/Tpm20.h")]
+    [RecordSource("edk2/Tpm20.h", RecordSourcePlatform.Uefi)]
     internal struct TPMT_HA {
         public TPM_ALG_ID hashAlg;
         public TPMU_HA digest;
@@ -35,7 +35,7 @@ namespace TcgLog {
         }
 
         public override string Name { get; } = nameof(TPMT_HA);
-        public override string? Source => SourceAttribute.Get<TPMT_HA>();
+        public override RecordSource? Source => RecordSourceAttribute.Get<TPMT_HA>();
 
         public override IReadOnlyList<RecordBase> Children => _children;
     }
