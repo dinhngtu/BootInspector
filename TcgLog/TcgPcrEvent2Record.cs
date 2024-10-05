@@ -26,18 +26,19 @@ namespace TcgLog {
         private readonly TPM_ALG_ID _hashAlg;
 
         public static TpmtHa Create(ReadOnlySpan<byte> bytes) {
-            var hashAlg = (TPM_ALG_ID)EnumUtils<TPM_ALG_ID>.ParseValue(bytes[..sizeof(TPM_ALG_ID)]);
+            var remain = bytes;
+            remain = EnumUtils<TPM_ALG_ID>.ParseNext(remain, out var hashAlg);
             var name = Enum.GetName<TPM_ALG_ID>(hashAlg) ?? EnumUtils<TPM_ALG_ID>.Format(hashAlg);
             switch (hashAlg) {
                 case TPM_ALG_ID.TPM_ALG_SHA1:
-                    return new TpmtHa(hashAlg, bytes.Slice(sizeof(TPM_ALG_ID), 20), name);
+                    return new TpmtHa(hashAlg, remain[..20], name);
                 case TPM_ALG_ID.TPM_ALG_SHA256:
                 case TPM_ALG_ID.TPM_ALG_SM3_256:
-                    return new TpmtHa(hashAlg, bytes.Slice(sizeof(TPM_ALG_ID), 32), name);
+                    return new TpmtHa(hashAlg, remain[..32], name);
                 case TPM_ALG_ID.TPM_ALG_SHA384:
-                    return new TpmtHa(hashAlg, bytes.Slice(sizeof(TPM_ALG_ID), 48), name);
+                    return new TpmtHa(hashAlg, remain[..48], name);
                 case TPM_ALG_ID.TPM_ALG_SHA512:
-                    return new TpmtHa(hashAlg, bytes.Slice(sizeof(TPM_ALG_ID), 64), name);
+                    return new TpmtHa(hashAlg, remain[..64], name);
                 default:
                     throw new NotImplementedException($"unsupported TPM_ALG_ID {hashAlg}");
             }
@@ -62,14 +63,14 @@ namespace TcgLog {
         private readonly List<RecordBase> _children;
 
         public static TcgPcrEvent2Record Create(ReadOnlySpan<byte> bytes) {
-            var pcrIndex = (uint)ValueUtils.ParseValue<uint>(bytes[..4]);
-            var eventType = (TCG_EVENTTYPE)EnumUtils<TCG_EVENTTYPE>.ParseValue(bytes[4..8]);
+            var remain = bytes;
+            remain = ValueUtils.ParseNext<uint>(remain, out var pcrIndex);
+            remain = EnumUtils<TCG_EVENTTYPE>.ParseNext(remain, out var eventType);
 
-            var digestsCount = (uint)ValueUtils.ParseValue<uint>(bytes[8..12]);
+            remain = ValueUtils.ParseNext<uint>(remain, out var digestsCount);
             if (digestsCount == 0 || digestsCount > 5) throw new ArgumentOutOfRangeException($"invalid digestsCount {digestsCount}");
-            var recordSize = 12;
 
-            var remain = bytes[12..];
+            var recordSize = bytes.Length - remain.Length;
             List<TpmtHa> digests = [];
             for (uint i = 0; i < digestsCount; i++) {
                 var digest = TpmtHa.Create(remain);
@@ -78,9 +79,9 @@ namespace TcgLog {
                 recordSize += digest.RecordSize;
             }
 
-            var eventSize = (uint)ValueUtils.ParseValue<uint>(remain[..4]);
+            remain = ValueUtils.ParseNext<uint>(remain, out var eventSize);
             recordSize += 4;
-            var eventData = remain.Slice(4, (int)eventSize);
+            var eventData = remain[..(int)eventSize];
             recordSize += eventData.Length;
 
             return new TcgPcrEvent2Record(bytes[..recordSize], pcrIndex, eventType, digests, eventData);

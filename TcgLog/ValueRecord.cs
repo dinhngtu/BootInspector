@@ -1,45 +1,54 @@
+using System.Runtime.InteropServices;
+
 namespace TcgLog {
     internal static class ValueUtils {
-        public static object ParseValue<T>(ReadOnlySpan<byte> bytes) {
+        public static T ParseValue<T>(ReadOnlySpan<byte> bytes) where T : unmanaged {
             if (typeof(T) == typeof(bool) && bytes.Length == sizeof(bool)) {
-                return BitConverter.ToBoolean(bytes);
+                return (T)(object)BitConverter.ToBoolean(bytes);
             } else if (typeof(T) == typeof(char) && bytes.Length == sizeof(char)) {
-                return BitConverter.ToChar(bytes);
+                return (T)(object)BitConverter.ToChar(bytes);
             } else if (typeof(T) == typeof(double) && bytes.Length == sizeof(double)) {
-                return BitConverter.ToDouble(bytes);
+                return (T)(object)BitConverter.ToDouble(bytes);
             } else if (typeof(T) == typeof(short) && bytes.Length == sizeof(short)) {
-                return BitConverter.ToInt16(bytes);
+                return (T)(object)BitConverter.ToInt16(bytes);
             } else if (typeof(T) == typeof(int) && bytes.Length == sizeof(int)) {
-                return BitConverter.ToInt32(bytes);
+                return (T)(object)BitConverter.ToInt32(bytes);
             } else if (typeof(T) == typeof(long) && bytes.Length == sizeof(long)) {
-                return BitConverter.ToInt64(bytes);
+                return (T)(object)BitConverter.ToInt64(bytes);
             } else if (typeof(T) == typeof(float) && bytes.Length == sizeof(float)) {
-                return BitConverter.ToSingle(bytes);
+                return (T)(object)BitConverter.ToSingle(bytes);
             } else if (typeof(T) == typeof(ushort) && bytes.Length == sizeof(ushort)) {
-                return BitConverter.ToUInt16(bytes);
+                return (T)(object)BitConverter.ToUInt16(bytes);
             } else if (typeof(T) == typeof(uint) && bytes.Length == sizeof(uint)) {
-                return BitConverter.ToUInt32(bytes);
+                return (T)(object)BitConverter.ToUInt32(bytes);
             } else if (typeof(T) == typeof(ulong) && bytes.Length == sizeof(ulong)) {
-                return BitConverter.ToUInt64(bytes);
+                return (T)(object)BitConverter.ToUInt64(bytes);
             } else if (typeof(T) == typeof(nint) && bytes.Length == nint.Size) {
                 unchecked {
                     if (nint.Size == sizeof(int)) {
-                        return (nint)BitConverter.ToInt32(bytes);
+                        return (T)(object)(nint)BitConverter.ToInt32(bytes);
                     } else {
-                        return (nint)BitConverter.ToInt64(bytes);
+                        return (T)(object)(nint)BitConverter.ToInt64(bytes);
                     }
                 }
             } else if (typeof(T) == typeof(nuint) && bytes.Length == nuint.Size) {
                 unchecked {
                     if (nuint.Size == sizeof(uint)) {
-                        return (nuint)BitConverter.ToUInt32(bytes);
+                        return (T)(object)(nuint)BitConverter.ToUInt32(bytes);
                     } else {
-                        return (nuint)BitConverter.ToUInt64(bytes);
+                        return (T)(object)(nuint)BitConverter.ToUInt64(bytes);
                     }
                 }
             } else {
                 throw new ArgumentOutOfRangeException(nameof(bytes));
             }
+        }
+
+        public static ReadOnlySpan<byte> ParseNext<T>(ReadOnlySpan<byte> bytes, out T value) where T : unmanaged {
+            var size = Marshal.SizeOf<T>();
+            var valBytes = bytes[..size];
+            value = ParseValue<T>(valBytes);
+            return bytes[size..];
         }
     }
 

@@ -14,5 +14,12 @@ namespace TcgLog {
             }
             return value;
         }
+
+        public static ReadOnlySpan<byte> ParseNext<T>(ReadOnlySpan<byte> bytes, out T value) where T : struct {
+            var size = Marshal.SizeOf<T>();
+            var valBytes = bytes[..size];
+            value = ParseValue<T>(valBytes);
+            return bytes[size..];
+        }
     }
 }

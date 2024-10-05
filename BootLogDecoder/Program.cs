@@ -14,7 +14,7 @@ namespace BootLogDecoder {
             var log = new WbclLog(logbytes, parseSettings);
 
             var formatterSettings = new LogFormatterSettings {
-                WriteSource = true,
+                WriteSource = false,
             };
             var logxml = new XmlDocument();
             logxml.AppendChild(log.ToXml(logxml, formatterSettings));

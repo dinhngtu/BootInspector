@@ -7,7 +7,7 @@ namespace TcgLog {
         public override RecordSource? Source { get; } = null;
         public byte[] GetBytes() { return _bytes; }
         public int Size => _bytes.Length;
-        public override string? ToString() { return BitConverter.ToString(_bytes); }
+        public override string? ToString() { return Convert.ToHexString(_bytes); }
         public override IReadOnlyList<RecordBase> Children => [];
     }
 

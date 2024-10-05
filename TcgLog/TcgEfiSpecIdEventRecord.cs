@@ -32,8 +32,7 @@ namespace TcgLog {
         private readonly List<TCG_EfiSpecIdEventAlgorithmSize> _algorithms = [];
 
         public TcgEfiSpecIdEventRecord(ReadOnlySpan<byte> bytes) : base(bytes) {
-            var invariantBytes = bytes[..HeaderSize];
-            _invariant = StructUtils.ParseValue<TCG_EfiSpecIDEventStruct_Invariant>(invariantBytes);
+            var remain = StructUtils.ParseNext<TCG_EfiSpecIDEventStruct_Invariant>(bytes, out _invariant);
 
             string signature;
             unsafe {
@@ -50,15 +49,13 @@ namespace TcgLog {
                 throw new NotImplementedException($"unsupported spec version {_invariant.specVersionMajor}.{_invariant.specVersionMinor}");
             }
 
-            var numberOfAlgorithms = BitConverter.ToUInt32(bytes.Slice(HeaderSize, 4));
+            remain = ValueUtils.ParseNext<uint>(remain, out var numberOfAlgorithms);
             if (numberOfAlgorithms == 0 || numberOfAlgorithms > 5) {
                 throw new NotImplementedException($"unsupported numberOfAlgorithms {numberOfAlgorithms}");
             }
-            var remain = bytes[(HeaderSize + 4)..];
             for (int i = 0; i < numberOfAlgorithms; i++) {
-                var algBytes = remain[..AlgorithmSize];
-                _algorithms.Add(StructUtils.ParseValue<TCG_EfiSpecIdEventAlgorithmSize>(algBytes));
-                remain = remain[AlgorithmSize..];
+                remain = StructUtils.ParseNext<TCG_EfiSpecIdEventAlgorithmSize>(remain, out var alg);
+                _algorithms.Add(alg);
             }
 
             var vendorInfoSize = remain[0];
